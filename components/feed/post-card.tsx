@@ -9,7 +9,7 @@ import { UserAvatar } from '@/components/shared/user-avatar'
 import { PostReactions } from '@/components/feed/post-reactions'
 import { cn } from '@/lib/utils'
 import type { Post, ReactionType } from '@/lib/types'
-import { formatTimeAgo, formatNumber } from '@/lib/mock-data'
+import { formatDate, formatNumber } from '@/lib/mock-data'
 
 interface PostCardProps {
   post: Post
@@ -56,7 +56,7 @@ export function PostCard({ post }: PostCardProps) {
                 <div className="flex items-center gap-1 text-sm text-muted-foreground">
                   <span>@{post.author.username}</span>
                   <span>·</span>
-                  <span>{formatTimeAgo(post.createdAt)}</span>
+                  <span>{formatDate(post.createdAt)}</span>
                 </div>
               </div>
               <Button variant="ghost" size="icon" className="h-8 w-8 shrink-0">

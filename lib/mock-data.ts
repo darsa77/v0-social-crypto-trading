@@ -505,6 +505,37 @@ export const messages: Record<string, Message[]> = {
   ],
 }
 
+export const stories = [
+  {
+    id: 'story-1',
+    title: 'How Bitcoin ETFs Changed Retail Sentiment',
+    excerpt:
+      'The recent ETF approvals shifted market dynamics and brought new capital — here’s what traders should watch next.',
+    image: 'https://images.unsplash.com/photo-1611672841973-5f6f9f1a3b8c?w=800&h=600&fit=crop',
+    author: users[0],
+    publishedAt: '2024-05-01T08:00:00Z',
+    readingTime: '4 min',
+  },
+  {
+    id: 'story-2',
+    title: 'DeFi Trends: Where Yield Is Going in 2024',
+    excerpt: 'Yield strategies are evolving. From structured products to novel staking, learn which ideas are gaining traction.',
+    image: 'https://images.unsplash.com/photo-1618534694758-11b2b1e7b8c2?w=800&h=600&fit=crop',
+    author: users[1],
+    publishedAt: '2024-04-20T10:00:00Z',
+    readingTime: '6 min',
+  },
+  {
+    id: 'story-3',
+    title: 'NFTs With Real Utility: Beyond PFPs',
+    excerpt: 'A closer look at NFT projects providing memberships, tickets, and on-chain utility that last beyond hype.',
+    image: 'https://images.unsplash.com/photo-1605902711622-cfb43c44367b?w=800&h=600&fit=crop',
+    author: users[5],
+    publishedAt: '2024-03-15T12:00:00Z',
+    readingTime: '5 min',
+  },
+]
+
 export function formatTimeAgo(dateString: string): string {
   const date = new Date(dateString)
   const now = new Date()
@@ -515,6 +546,14 @@ export function formatTimeAgo(dateString: string): string {
   if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)}h ago`
   if (diffInSeconds < 604800) return `${Math.floor(diffInSeconds / 86400)}d ago`
   return date.toLocaleDateString()
+}
+
+export function formatDate(dateString: string): string {
+  return new Date(dateString).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+  })
 }
 
 export function formatNumber(num: number): string {

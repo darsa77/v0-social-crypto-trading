@@ -1,8 +1,9 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { usePathname } from 'next/navigation'
-import { Home, Store, MessageCircle, User, Plus, TrendingUp, Settings, LogOut } from 'lucide-react'
+import { Home, Store, MessageCircle, User, Plus, Settings } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useCart } from '@/components/cart-provider'
 import { ThemeToggle } from '@/components/layout/theme-toggle'
@@ -23,9 +24,7 @@ export function Sidebar() {
   return (
     <aside className="fixed left-0 top-0 z-40 hidden h-screen w-64 flex-col border-r border-border bg-card md:flex">
       <div className="flex h-16 items-center gap-3 border-b border-border px-6">
-        <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-violet-600">
-          <TrendingUp className="h-5 w-5 text-white" />
-        </div>
+        <Image src="/logo.png" alt="Logo" width={36} height={36} className="rounded-lg" />
         <span className="text-lg font-bold">CryptoSocial</span>
       </div>
 

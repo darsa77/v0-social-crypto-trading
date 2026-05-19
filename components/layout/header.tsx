@@ -1,6 +1,6 @@
 'use client'
-
-import { TrendingUp, Bell, Search } from 'lucide-react'
+import Image from "next/image"
+import { Bell, Search } from 'lucide-react'
 import { ThemeToggle } from '@/components/layout/theme-toggle'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -15,9 +15,7 @@ export function Header({ title = 'CryptoSocial', showSearch = false }: HeaderPro
     <header className="sticky top-0 z-30 border-b border-border bg-background/80 backdrop-blur-xl md:hidden">
       <div className="flex h-14 items-center justify-between px-4">
         <div className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-violet-600">
-            <TrendingUp className="h-4 w-4 text-white" />
-          </div>
+          <Image src="/logo.png" alt="Logo" width={32} height={32} className="bg-transparent" />
           <span className="text-lg font-bold">{title}</span>
         </div>
 

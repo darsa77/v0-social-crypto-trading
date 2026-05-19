@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 import { Inter } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
+import { ClerkProvider } from '@clerk/nextjs'
 import { ThemeProvider } from '@/components/theme-provider'
 import { CartProvider } from '@/components/cart-provider'
 import { Sidebar } from '@/components/layout/sidebar'
@@ -40,19 +41,21 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className="bg-background" suppressHydrationWarning>
-      <body className={`${inter.variable} font-sans antialiased`}>
-        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
-          <CartProvider>
-            <div className="flex min-h-screen">
-              <Sidebar />
-              <main className="flex-1 pb-20 md:ml-64 md:pb-0">{children}</main>
-              <MobileNav />
-            </div>
-          </CartProvider>
-        </ThemeProvider>
-        {process.env.NODE_ENV === 'production' && <Analytics />}
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang="en" className="bg-background" suppressHydrationWarning>
+        <body className={`${inter.variable} font-sans antialiased`}>
+          <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
+            <CartProvider>
+              <div className="flex min-h-screen">
+                <Sidebar />
+                <main className="flex-1 pb-20 md:ml-64 md:pb-0">{children}</main>
+                <MobileNav />
+              </div>
+            </CartProvider>
+          </ThemeProvider>
+          {process.env.NODE_ENV === 'production' && <Analytics />}
+        </body>
+      </html>
+    </ClerkProvider>
   )
 }
