@@ -1,7 +1,9 @@
 'use client'
 
 import Image from 'next/image'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useAuth } from '@clerk/nextjs'
+import { useRouter } from 'next/navigation'
 import { Header } from '@/components/layout/header'
 import { FeedFilters } from '@/components/feed/feed-filters'
 import { PostCard } from '@/components/feed/post-card'
@@ -10,7 +12,17 @@ import { posts } from '@/lib/mock-data'
 import type { FeedFilter } from '@/lib/types'
 
 export default function FeedPage() {
+  const { isLoaded, isSignedIn } = useAuth()
+  const router = useRouter()
   const [filter, setFilter] = useState<FeedFilter>('all')
+
+  useEffect(() => {
+    if (isLoaded && !isSignedIn) {
+      router.push('/sign-in')
+    }
+  }, [isLoaded, isSignedIn, router])
+
+  if (!isLoaded || !isSignedIn) return null
 
   const filteredPosts = posts.filter((post) => {
     if (filter === 'all') return true
