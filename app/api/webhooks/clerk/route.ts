@@ -1,53 +1,32 @@
-import { Webhook } from 'svix'
-import { headers } from 'next/headers'
-import { WebhookEvent } from '@clerk/nextjs/server'
+import { auth, currentUser } from '@clerk/nextjs/server'
 import { supabase } from '@/lib/supabase'
+import { NextResponse } from 'next/server'
 
-export async function POST(req: Request) {
-  const WEBHOOK_SECRET = process.env.CLERK_WEBHOOK_SECRET
+export async function POST() {
+  const { userId } = await auth()
+  if (!userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
-  if (!WEBHOOK_SECRET) {
-    throw new Error('Missing CLERK_WEBHOOK_SECRET')
-  }
+  const user = await currentUser()
+  if (!user) return NextResponse.json({ error: 'No user' }, { status: 401 })
 
-  const headerPayload = await headers()
-  const svix_id = headerPayload.get('svix-id')
-  const svix_timestamp = headerPayload.get('svix-timestamp')
-  const svix_signature = headerPayload.get('svix-signature')
+  const email = user.emailAddresses[0].emailAddress
+  const username = email.split('@')[0]
 
-  if (!svix_id || !svix_timestamp || !svix_signature) {
-    return new Response('Error occured -- no svix headers', { status: 400 })
-  }
+  const { data: existing } = await supabase
+    .from('profiles')
+    .select('id')
+    .eq('clerk_id', userId)
+    .single()
 
-  const payload = await req.json()
-  const body = JSON.stringify(payload)
-
-  const wh = new Webhook(WEBHOOK_SECRET)
-  let evt: WebhookEvent
-
-  try {
-    evt = wh.verify(body, {
-      'svix-id': svix_id,
-      'svix-timestamp': svix_timestamp,
-      'svix-signature': svix_signature,
-    }) as WebhookEvent
-  } catch (err) {
-    return new Response('Error occured', { status: 400 })
-  }
-
-  if (evt.type === 'user.created') {
-    const { id, email_addresses, first_name, last_name, image_url } = evt.data
-    const email = email_addresses[0].email_address
-    const username = email.split('@')[0]
-
+  if (!existing) {
     await supabase.from('profiles').insert({
       id: crypto.randomUUID(),
-      clerk_id: id,
+      clerk_id: userId,
       username,
-      display_name: `${first_name || ''} ${last_name || ''}`.trim() || username,
-      avatar_url: image_url,
+      display_name: `${user.firstName || ''} ${user.lastName || ''}`.trim() || username,
+      avatar_url: user.imageUrl,
     })
   }
 
-  return new Response('', { status: 200 })
+  return NextResponse.json({ success: true })
 }

@@ -20,6 +20,9 @@ export default function FeedPage() {
     if (isLoaded && !isSignedIn) {
       router.push('/sign-in')
     }
+    if (isLoaded && isSignedIn) {
+      fetch('/api/profile', { method: 'POST' })
+    }
   }, [isLoaded, isSignedIn, router])
 
   if (!isLoaded || !isSignedIn) return null
